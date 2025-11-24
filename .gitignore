@@ -1,0 +1,29 @@
+# -------------------------
+# VS Code
+# -------------------------
+.vscode/
+
+# -------------------------
+# Build directories
+# -------------------------
+build/
+**/build/
+out/
+dist/
+
+# -------------------------
+# C++ ignores
+# -------------------------
+*.o
+*.obj
+*.out
+*.exe
+*.a
+*.so
+*.dll
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
