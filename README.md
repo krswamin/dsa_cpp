@@ -1,6 +1,6 @@
 # dsa_cpp
 ✅ Usage from the root directory \
-✅  Build all 
+✅  Build all . 
 ```
 make 
 ```
@@ -8,6 +8,15 @@ This will:
 - Create a build/ folder
 - Create subfolders inside build/ corresponding to your modules (arrays/, maps/, etc.)
 - Compile each .cpp into an executable in its respective build subfolder
+- Makefile automatically enables parallel build using all available cores (-j option)
+
+
+If you'd like to override to use only some cores
+```
+make -j8      # use 8 threads
+make -j4      # use 4 threads
+```
+
 
 ✅  Build only a single file \
 You can also build a single .cpp file. \

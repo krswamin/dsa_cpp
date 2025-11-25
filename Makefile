@@ -1,28 +1,40 @@
-# Compiler and flags
-CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -O2
+# Enable parallel builds automatically, to use all available cores
+MAKEFLAGS += -j
 
-# Root build folder
+# Compiler and flags
+# -MMD -MP generates .d dependency files automatically.
+# Only the relevant executable will rebuild — not the whole project.
+CXX := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -MMD -MP
+
+# Root build directory
 BUILD := build
 
-# Automatically find all subfolders
+# Automatically find all subdirectories (exclude build)
 SUBDIRS := $(shell find . -maxdepth 1 -type d ! -name . ! -name $(BUILD) | sed 's|./||')
 
-# Collect all source files in all subfolders
-SOURCES := $(foreach dir,$(SUBDIRS),$(wildcard $(dir)/*.cpp))
+# Find all .cpp files in all subdirs
+SOURCES := $(foreach d,$(SUBDIRS),$(wildcard $(d)/*.cpp))
 
-# Generate target executables in build/<subfolder>/<name>
+# Convert src.cpp -> build/src_folder/src
 TARGETS := $(patsubst %.cpp,$(BUILD)/%,$(SOURCES))
 
-# Default target
+# Corresponding dependency files
+DEPS := $(TARGETS:%=%.d)
+
+# Default build
 all: $(TARGETS)
 
-# Rule to build each executable
+# Pattern rule for building executables
+# Enables incremental build
 $(BUILD)/%: %.cpp
-	@dir=$(dir $@); \
-	mkdir -p $$dir; \
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
-# Clean build folder
+# Include dependency files (auto-create if missing)
+# Needed for incremental build
+-include $(DEPS)
+
+# Clean everything
 clean:
 	rm -rf $(BUILD)
