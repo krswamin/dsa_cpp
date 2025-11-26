@@ -83,20 +83,33 @@ lint_modified:
 	fi
 
 # ----------------------------------------
-# Static analysis with cppcheck
+# Static analysis with cppcheck (full run)
 # ----------------------------------------
 cppcheck:
 	@echo "Running cppcheck on ALL C++ files..."
-	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 $(SOURCES)
+	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $(SRCFILES)
 
+# cppcheck only on modified files
 cppcheck_modified:
 	@echo "Running cppcheck on modified files..."
 	@changed=$$(git diff --name-only --diff-filter=ACM | grep -E '\.cpp$$'); \
 	if [ -n "$$changed" ]; then \
-		$(CPPCHECK) --enable=all --inconclusive --std=c++17 $$changed; \
+		$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $$changed; \
 	else \
 		echo "No modified files for cppcheck."; \
 	fi
+
+# ----------------------------------------
+# Run cppcheck on a specific folder
+# Usage: make cppcheck_dir DIR=foldername
+# ----------------------------------------
+cppcheck_dir:
+	@if [ -z "$(DIR)" ]; then \
+		echo "Usage: make cppcheck_dir DIR=foldername"; \
+		exit 1; \
+	fi
+	@echo "Running cppcheck on folder $(DIR)..."
+	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $(DIR)
 
 # ----------------------------------------
 # Full rebuild (clean + build)
@@ -117,4 +130,4 @@ clean:
 # ----------------------------------------
 # Declare phony targets
 # ----------------------------------------
-.PHONY: all prebuild format format_modified lint lint_modified cppcheck cppcheck_modified rebuild clean
+.PHONY: all prebuild format format_modified lint lint_modified cppcheck cppcheck_modified cppcheck_dir rebuild clean
