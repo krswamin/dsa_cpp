@@ -53,7 +53,7 @@ int main(){
     }
 
 void delete_even_numbers(vector<int> &arr){
-    for(int i=0; i<arr.size();){
+    for(size_t i=0; i<arr.size();){
         if (arr[i]%2 ==0){
             arr.erase(arr.begin()+i);
         }

@@ -66,7 +66,7 @@ vector <int> max_subarray_kadane(const vector<int> &x){
     int curr_start_idx = 0;
     int curr_end_idx = 0;
 
-    for( int i = 1; i < x.size(); i++){
+    for( size_t i = 1; i < x.size(); i++){
        
        // Step 1: Compare curr_sum + x and x(the next integer)
        if (curr_sum + x[i] > x[i]) {

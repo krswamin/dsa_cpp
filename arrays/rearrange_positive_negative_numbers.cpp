@@ -42,9 +42,9 @@ int main(){
 }
 
 void rearrange_pos_neg(vector<int> &arr){
-    int next_neg_index = 0;
-    int temp;
-    for (int i=0; i<arr.size(); i++){
+    size_t next_neg_index = 0;
+    size_t temp;
+    for (size_t i=0; i<arr.size(); i++){
         if(arr[i]< 0) {
             // no need to swap if i and the next_neg_index are the same
             if (i!=next_neg_index){

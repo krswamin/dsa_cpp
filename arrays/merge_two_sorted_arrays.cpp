@@ -47,9 +47,9 @@ int main (){
 vector<int> merge_arrays_v1(const vector<int> &x1, const vector<int> &x2){
     vector<int> x3(x1.size()+x2.size());
 
-    int i =0;
-    int j =0;
-    int k =0;
+    size_t i =0;
+    size_t j =0;
+    size_t k =0;
     while(k<x1.size()+x2.size()){
         // KSW: important learning. the order of size checks here matter a lot
         // Swapping the condition orders could cause out of bound conditions
@@ -75,8 +75,8 @@ vector<int> merge_arrays_v2(const vector<int> &x1, const vector<int> &x2){
     vector<int> x3;
     x3.reserve(x1.size()+x2.size());
 
-    int i =0;
-    int j =0;
+    size_t i =0;
+    size_t j =0;
     while(i<x1.size() && j<x2.size()){
         // KSW: important learning. the order of size checks here matter a lot
         // Swapping the condition orders could cause out of bound conditions

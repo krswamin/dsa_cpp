@@ -32,12 +32,12 @@ vector<int> product_except_self(const vector<int> &arr){
 
     left_product.push_back(1);
     right_product[arr.size()-1] = 1;
-    for(int i=1; i<arr.size(); i++){
+    for(size_t i=1; i<arr.size(); i++){
         left_product.push_back(arr[i-1]*left_product[i-1]);
         right_product[arr.size()-1-i] = arr[arr.size()-i]*right_product[arr.size()-i];
     }
 
-    for(int i=0; i<arr.size(); i++){
+    for(size_t i=0; i<arr.size(); i++){
         product.push_back(left_product[i]*right_product[i]);
     }
     

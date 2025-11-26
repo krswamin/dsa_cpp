@@ -41,7 +41,7 @@ int main() {
     
     int sizes[] = {4, 5, 5, 1, 5}; 
     int* result;
-    for (int i = 0; i < sizeof(inputs)/sizeof(inputs[0]); ++i) {
+    for (size_t i = 0; i < sizeof(inputs)/sizeof(inputs[0]); ++i) {
         std::cout << i + 1 << ".\tArray: [";
         for (int j = 0; j < sizes[i]; ++j) {
             if(j==sizes[i]-1)

@@ -42,7 +42,7 @@ int main() {
     };
     int sizes[] = {4, 4, 4, 4, 3};
 
-    for (int i = 0; i < sizeof(inputs) / sizeof(inputs[0]); i++) {
+    for (size_t i = 0; i < sizeof(inputs) / sizeof(inputs[0]); i++) {
         cout << i + 1 << ".\tArray: [";
         for (int j = 0; j < sizes[i]; j++) {
             cout << inputs[i][j];
