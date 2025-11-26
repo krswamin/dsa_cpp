@@ -1,6 +1,6 @@
 # dsa_cpp
 ✅ Usage from the root directory \
-✅  Build all . 
+✅  Build all 
 ```
 make 
 ```
@@ -9,7 +9,16 @@ This will:
 - Create subfolders inside build/ corresponding to your modules (arrays/, maps/, etc.)
 - Compile each .cpp into an executable in its respective build subfolder
 - Makefile automatically enables parallel build using all available cores (-j option)
+- formats only modified files, then builds incrementally.
 
+Note: \ 
+You will need clang format installed 
+```
+sudo apt update
+sudo apt install clang-format
+```
+
+✅  Use only some cores 
 
 If you'd like to override to use only some cores
 ```
@@ -17,12 +26,17 @@ make -j8      # use 8 threads
 make -j4      # use 4 threads
 ```
 
+✅  Formatting 
+```
+make format
+```
+formats all .cpp and .h files (full enforcement).
+
 
 ✅  Build only a single file \
 You can also build a single .cpp file. \
 The Makefile will create build/arrays/ if it doesn’t exist
 Compile only arrays/array1.cpp into build/arrays/array1
-
 ```
 make build/arrays/array1
 ```
