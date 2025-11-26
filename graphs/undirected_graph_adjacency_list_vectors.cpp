@@ -16,22 +16,22 @@ using namespace std;
 // UGraph is an Undirected Graph
 class UGraph{
     private:
-        vector<vector<int>> graph;
+        vector<vector<size_t>> graph;
 
     public:
-        UGraph(const vector<vector<int>> &g);
-        void add_node(int new_node_num, const vector<int>& neighbors);
-        void delete_node(int delete_node_num);
-        void add_edge(int idx1, int idx2);
-        void delete_edge(int idx1, int idx2);
+        UGraph(const vector<vector<size_t>> &g);
+        void add_node(size_t new_node_num, const vector<size_t>& neighbors);
+        void delete_node(size_t delete_node_num);
+        void add_edge(size_t idx1, size_t idx2);
+        void delete_edge(size_t idx1, size_t idx2);
         void print();
 };
 
 // Use initialization list in constructor
-UGraph::UGraph(const vector<vector<int>> &g) : graph(g){
+UGraph::UGraph(const vector<vector<size_t>> &g) : graph(g){
 }
 
-void UGraph::add_node(int new_node, const vector<int>& neighbors) {
+void UGraph::add_node(size_t new_node, const vector<size_t>& neighbors) {
     if (new_node != graph.size()) {
         cout<<"Cannot add node. Invalid idx:"<<new_node<<". ";
         cout<<"Graph size is: "<< graph.size()<<". Max graph idx = "<< graph.size() -1<< "\n";
@@ -40,7 +40,7 @@ void UGraph::add_node(int new_node, const vector<int>& neighbors) {
 
     // Ensure that all the new node's neighbors exist
     // Note : That the node can be its own neighbor i.e. self loop
-    for (int n : neighbors) {
+    for (size_t n : neighbors) {
         if (n >graph.size()) {
             cout << "Cannot add node: neighbor " << n << " does not exist\n";
             return;
@@ -59,8 +59,8 @@ i) delete the row of that node
 ii) in all other rows delete every occurence of that node as a neighbor
 iii) in all other rows , indices greater than the node, should be reduced by 1
 */
-void UGraph::delete_node(int delete_node){
-    if (delete_node <0 || delete_node>= graph.size() ) {
+void UGraph::delete_node(size_t delete_node){
+    if (delete_node>= graph.size() ) {
         cout<<"Cannot delete node. Invalid idx:"<<delete_node<<". ";
         cout<<"Graph size is: "<< graph.size()<<". Max graph idx = "<< graph.size() -1 << "\n";
         return; 
@@ -83,9 +83,9 @@ void UGraph::delete_node(int delete_node){
     }
 }
 
-void UGraph::add_edge(int idx1, int idx2){
+void UGraph::add_edge(size_t idx1, size_t idx2){
     // Check for validity of indices
-    if(idx1 <0 || idx1 >= graph.size() || idx2 <0 || idx2 >= graph.size()){
+    if(idx1 >= graph.size() || idx2 >= graph.size()){
         cout<<"Cannot add edge. One or more invalid indices:"<<idx1<<","<<idx2<<". ";
         cout<<"Graph size is: "<< graph.size()<<". Max graph idx = "<< graph.size() - 1<< "\n";
         return; 
@@ -105,9 +105,9 @@ void UGraph::add_edge(int idx1, int idx2){
 }
 
 
-void UGraph::delete_edge(int idx1, int idx2){
+void UGraph::delete_edge(size_t idx1, size_t idx2){
     // Check for validity of indices
-    if(idx1 <0 || idx1 >= graph.size() || idx2 <0 || idx2 >= graph.size()){
+    if(idx1 >= graph.size() || idx2 >= graph.size()){
         cout<<"Cannot delete edge. One or more invalid indices:"<<idx1<<","<<idx2<<". ";
         cout<<"Graph size is: "<< graph.size()<<". Max graph idx = "<< graph.size() -1 << "\n";
         return; 
@@ -123,7 +123,7 @@ void UGraph::delete_edge(int idx1, int idx2){
 }
 
 void UGraph::print(){
-    int i =0;
+    size_t i =0;
     for (const auto &vect:graph){
         cout<<i<<":";
         for (const auto &x: vect){
@@ -135,7 +135,7 @@ void UGraph::print(){
 }
 
 int main(){
-    vector<vector<int>> v = {{1},{0,2}, {1,3}, {2}};
+    vector<vector<size_t>> v = {{1},{0,2}, {1,3}, {2}};
     UGraph g(v);
     cout<<"Graph at start:\n";
     g.print();

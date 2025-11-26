@@ -31,7 +31,7 @@ UGraph::UGraph(vector<int> nodes, vector<unordered_set<int>> neighbors){
         return; 
     }
 
-    for (int i = 0; i < nodes.size(); i++){
+    for (size_t i = 0; i < nodes.size(); i++){
         graph.insert({nodes[i],neighbors[i]});
     }
 }
