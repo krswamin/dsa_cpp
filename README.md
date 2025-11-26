@@ -12,10 +12,20 @@ This will:
 - formats only modified files, then builds incrementally.
 
 Note: \ 
-You will need clang format installed 
+#### Install clang-format
 ```
 sudo apt update
 sudo apt install clang-format
+```
+#### Install clang-tidy
+```
+sudo apt update
+sudo apt install clang-tidy
+```
+
+#### Install cppcheck
+```
+sudo apt install cppcheck
 ```
 
 ✅  Use only some cores 
@@ -26,13 +36,6 @@ make -j8      # use 8 threads
 make -j4      # use 4 threads
 ```
 
-✅  Formatting 
-```
-make format
-```
-formats all .cpp and .h files (full enforcement).
-
-
 ✅  Build only a single file \
 You can also build a single .cpp file. \
 The Makefile will create build/arrays/ if it doesn’t exist
@@ -41,11 +44,37 @@ Compile only arrays/array1.cpp into build/arrays/array1
 make build/arrays/array1
 ```
 
-✅ Clean all executables \
-To delete the entire build/ folder:
+✅  Formatting 
+```
+make format
+```
+formats all .cpp and .h files (full enforcement).(not just modified files)
+
+✅  Linting
+```
+make lint
+```
+run clang-tidy on all files (not just modified files)
+
+
+✅  CPP-check
+```
+make cppcheck
+```
+run cppcheck on all files (not just modified files)
+
+
+✅ Clean all executables
 ```
 make clean
 ```
+delete the entire build/ folder
+
+✅ Rebuild
+```
+make rebuild	
+```
+Clean + full build
 
 ✅ How it works 
 - SUBDIRS – uses find to list all subfolders in your project (excluding . and build/).
@@ -54,6 +83,7 @@ make clean
 - $(BUILD)/%: %.cpp – compiles each .cpp to its corresponding executable. Creates the directory if needed.
 - make → builds everything
 - make clean → deletes build/
+
 
 
 

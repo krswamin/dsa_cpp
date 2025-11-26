@@ -9,11 +9,13 @@ MAKEFLAGS += -j
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -MMD -MP
 
-# Formatter
-CLANG_FORMAT := clang-format
-
 # Root build directory
 BUILD := build
+
+# Formatter & Linters
+CLANG_FORMAT := clang-format
+CLANG_TIDY := clang-tidy
+CPPCHECK := cppcheck
 
 # Automatically find all subdirectories (exclude build)
 SUBDIRS := $(shell find . -maxdepth 1 -type d ! -name . ! -name $(BUILD) | sed 's|./||')
@@ -30,9 +32,9 @@ TARGETS := $(patsubst %.cpp,$(BUILD)/%,$(SOURCES))
 DEPS := $(TARGETS:%=%.d)
 
 # ----------------------------------------
-# Default build: format modified files then compile
+# Default build: format/lint modified files then compile
 # ----------------------------------------
-all: format_modified $(TARGETS)
+all: prebuild $(TARGETS)
 
 # ----------------------------------------
 # Pattern rule: build each executable
@@ -42,15 +44,18 @@ $(BUILD)/%: %.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 # ----------------------------------------
-# Format ALL files (manual)
+# Pre-build: format and lint only modified files (fast)
+# ----------------------------------------
+prebuild: format_modified lint_modified cppcheck_modified
+
+# ----------------------------------------
+# Format ALL files (manual, full run)
 # ----------------------------------------
 format:
 	@echo "Formatting ALL C++ files..."
 	@$(CLANG_FORMAT) -i $(SRCFILES)
 
-# ----------------------------------------
 # Format only modified files (fast, automatic)
-# ----------------------------------------
 format_modified:
 	@echo "Formatting modified C++ files..."
 	@changed=$$(git diff --name-only --diff-filter=ACM | grep -E '\.(cpp|h)$$'); \
@@ -61,12 +66,55 @@ format_modified:
 	fi
 
 # ----------------------------------------
-# Include dependency files for incremental build
+# Lint ALL files (manual, full run)
 # ----------------------------------------
--include $(DEPS)
+lint:
+	@echo "Running clang-tidy on ALL C++ files..."
+	@$(CLANG_TIDY) $(SOURCES) -- -I.
+
+# Lint only modified files (fast, automatic)
+lint_modified:
+	@echo "Running clang-tidy on modified files..."
+	@changed=$$(git diff --name-only --diff-filter=ACM | grep -E '\.cpp$$'); \
+	if [ -n "$$changed" ]; then \
+		$(CLANG_TIDY) $$changed -- -I.; \
+	else \
+		echo "No modified files to lint."; \
+	fi
+
+# ----------------------------------------
+# Static analysis with cppcheck
+# ----------------------------------------
+cppcheck:
+	@echo "Running cppcheck on ALL C++ files..."
+	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 $(SOURCES)
+
+cppcheck_modified:
+	@echo "Running cppcheck on modified files..."
+	@changed=$$(git diff --name-only --diff-filter=ACM | grep -E '\.cpp$$'); \
+	if [ -n "$$changed" ]; then \
+		$(CPPCHECK) --enable=all --inconclusive --std=c++17 $$changed; \
+	else \
+		echo "No modified files for cppcheck."; \
+	fi
+
+# ----------------------------------------
+# Full rebuild (clean + build)
+# ----------------------------------------
+rebuild: clean all
 
 # ----------------------------------------
 # Clean build artifacts
 # ----------------------------------------
 clean:
 	rm -rf $(BUILD)
+
+# ----------------------------------------
+# Include dependency files for incremental build
+# ----------------------------------------
+-include $(DEPS)
+
+# ----------------------------------------
+# Declare phony targets
+# ----------------------------------------
+.PHONY: all prebuild format format_modified lint lint_modified cppcheck cppcheck_modified rebuild clean
