@@ -16,11 +16,11 @@ private:
 
 public:
   UGraph(vector<int> nodes, vector<unordered_set<int>> neighbors);
-  void add_node(int new_node_num, const unordered_set<int> &neighbors);
-  void delete_node(int delete_node_num);
+  void add_node(int new_node, const unordered_set<int> &neighbors);
+  void delete_node(int delete_node);
   void add_edge(int idx1, int idx2);
   void delete_edge(int idx1, int idx2);
-  void print();
+  void print() const;
 };
 
 // Use initialization list in constructor
@@ -97,7 +97,7 @@ void UGraph::delete_edge(int idx1, int idx2) {
   graph.at(idx2).erase(idx1);
 }
 
-void UGraph::print() {
+void UGraph::print() const {
   for (const auto &g : graph) {
     cout << g.first << ":";
     for (const auto &neighbor : g.second) {
