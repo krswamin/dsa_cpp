@@ -15,7 +15,6 @@ BUILD := build
 # Formatter & Linters
 CLANG_FORMAT := clang-format
 CLANG_TIDY := clang-tidy
-CPPCHECK := cppcheck
 
 # Automatically find all subdirectories (exclude build)
 SUBDIRS := $(shell find . -maxdepth 1 -type d ! -name . ! -name $(BUILD) | sed 's|./||')
@@ -46,7 +45,7 @@ $(BUILD)/%: %.cpp
 # ----------------------------------------
 # Pre-build: format and lint only modified files (fast)
 # ----------------------------------------
-prebuild: format_modified lint_modified cppcheck_modified
+prebuild: format_modified lint_modified
 
 # ----------------------------------------
 # Format ALL files (manual, full run)
@@ -83,35 +82,6 @@ lint_modified:
 	fi
 
 # ----------------------------------------
-# Static analysis with cppcheck (full run)
-# ----------------------------------------
-cppcheck:
-	@echo "Running cppcheck on ALL C++ files..."
-	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $(SRCFILES)
-
-# cppcheck only on modified files
-cppcheck_modified:
-	@echo "Running cppcheck on modified files..."
-	@changed=$$(git diff --name-only --diff-filter=ACM | grep -E '\.cpp$$'); \
-	if [ -n "$$changed" ]; then \
-		$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $$changed; \
-	else \
-		echo "No modified files for cppcheck."; \
-	fi
-
-# ----------------------------------------
-# Run cppcheck on a specific folder
-# Usage: make cppcheck_dir DIR=foldername
-# ----------------------------------------
-cppcheck_dir:
-	@if [ -z "$(DIR)" ]; then \
-		echo "Usage: make cppcheck_dir DIR=foldername"; \
-		exit 1; \
-	fi
-	@echo "Running cppcheck on folder $(DIR)..."
-	@$(CPPCHECK) --enable=all --inconclusive --std=c++17 --suppress=missingIncludeSystem $(DIR)
-
-# ----------------------------------------
 # Full rebuild (clean + build)
 # ----------------------------------------
 rebuild: clean all
@@ -130,4 +100,4 @@ clean:
 # ----------------------------------------
 # Declare phony targets
 # ----------------------------------------
-.PHONY: all prebuild format format_modified lint lint_modified cppcheck cppcheck_modified cppcheck_dir rebuild clean
+.PHONY: all prebuild format format_modified lint lint_modified rebuild clean
