@@ -26,6 +26,7 @@ public:
   UGraph(vector<int> nodes, vector<unordered_set<int>> neighbors);
   vector<int> bfs_with_status_map(int start_node);
   vector<int> bfs_with_color_sets(int start_node);
+  vector<int> bfs_standard(int start_node);
 };
 
 // Use initialization list in constructor
@@ -45,7 +46,7 @@ UGraph::UGraph(vector<int> nodes, vector<unordered_set<int>> neighbors) {
 vector<int> UGraph::bfs_with_status_map(int start_node) {
 
   queue<int> bfs_q;
-  vector<int> traverse;
+  vector<int> order;
   unordered_map<int, State> status;
   for (auto x : graph) {
     status.insert({x.first, State::UNVISITED});
@@ -63,7 +64,7 @@ vector<int> UGraph::bfs_with_status_map(int start_node) {
     while (bfs_q.size() != 0) {
       current = bfs_q.front();
       bfs_q.pop();
-      traverse.push_back(current);
+      order.push_back(current);
       status[current] = State::VISITED;
       auto &neighbors = graph[current];
       for (int neighbor : neighbors) {
@@ -84,13 +85,13 @@ vector<int> UGraph::bfs_with_status_map(int start_node) {
     }
   }
 
-  return traverse;
+  return order;
 }
 
 vector<int> UGraph::bfs_with_color_sets(int start_node) {
 
   queue<int> bfs_q;
-  vector<int> traverse;
+  vector<int> order;
   unordered_set<int> white; // unvisited
   unordered_set<int> grey;  // visited but not explored
   unordered_set<int> black; // explored
@@ -118,7 +119,7 @@ vector<int> UGraph::bfs_with_color_sets(int start_node) {
       bfs_q.pop();
       grey.erase(current);
       black.insert(current);
-      traverse.push_back(current);
+      order.push_back(current);
       // Check for neighbors and add them to the queue
       auto &neighbors = graph[current];
       for (auto neighbor : neighbors) {
@@ -138,7 +139,49 @@ vector<int> UGraph::bfs_with_color_sets(int start_node) {
     }
   }
 
-  return traverse;
+  return order;
+}
+
+vector<int> UGraph::bfs_standard(int start_node) {
+
+  queue<int> bfs_q;
+  vector<int> order;
+  unordered_set<int> visited; // visited but not necessarily explored
+
+  // As long as there are unvisited_nodes continue traversing
+  // There could be disconnected nodes
+  bool use_start_node = true;
+  for (auto &x : graph) {
+    if (visited.count(x.first)) {
+      continue;
+    }
+    if (use_start_node) {
+      bfs_q.push(start_node);
+      visited.insert(start_node);
+      use_start_node = false;
+    } else {
+      bfs_q.push(x.first);
+      visited.insert(x.first);
+    }
+
+    while (bfs_q.size() != 0) {
+      // i) pop it from the bfs_queue.
+      // ii) add to traversal order
+      int current = bfs_q.front();
+      bfs_q.pop();
+      order.push_back(current);
+      // Check for neighbors and add them to the queue
+      auto &neighbors = graph[current];
+      for (auto neighbor : neighbors) {
+        // If neighbor has not been visited
+        if (visited.count(neighbor) == 0) {
+          bfs_q.push(neighbor);
+          visited.insert(neighbor);
+        }
+      }
+    }
+  }
+  return order;
 }
 
 int main() {
@@ -147,17 +190,24 @@ int main() {
       {1, 3, 5}, {0, 2, 3, 4, 6}, {1, 4, 7}, {0, 1, 5, 6}, {1, 2, 6},
       {0, 3, 6}, {3, 4, 5, 7},    {2, 6},    {9},          {8}};
   UGraph g(nodes, neighbors);
-  vector<int> traverse;
-  traverse = g.bfs_with_status_map(0);
-  cout << "\n bfs(status map): traverse order: ";
-  for (auto x : traverse) {
+  vector<int> order;
+  order = g.bfs_with_status_map(0);
+  cout << "\n bfs(status map): traversal order: ";
+  for (auto x : order) {
     cout << x << ",";
   }
   cout << "\n";
 
-  traverse = g.bfs_with_color_sets(0);
-  cout << "\n bfs(color sets): traverse order: ";
-  for (auto x : traverse) {
+  order = g.bfs_with_color_sets(0);
+  cout << "\n bfs(color sets): traversal order: ";
+  for (auto x : order) {
+    cout << x << ",";
+  }
+  cout << "\n";
+
+  order = g.bfs_standard(8);
+  cout << "\n bfs(standard): traversal order: ";
+  for (auto x : order) {
     cout << x << ",";
   }
   cout << "\n";

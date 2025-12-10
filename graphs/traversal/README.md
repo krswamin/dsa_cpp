@@ -1,11 +1,11 @@
 # Undirected Graph BFS
+### High Level Summary
 There are a few approaches explained here. They have been implemented in undirected_graph_bfs.cpp . Not all approaches are standard. Nevertheless, they are the steps / the iterations which I experimented and implemented until I reached the more standard solution
 - Approach 1: bfs_with_status_map. Space O(V), Time O(V^2 + E)
 - Approach 2: bfs_with_colored_sets
-- Approach 3: bfs_standard (with only one set)
+- Approach 3: bfs_standard : Jump directly to this section for the standard implementation with only one set. 
 
 ## Approach 1: bfs_with_status_map
-### High Level Summary 
 - This uses an unordered_map to track the status of each node 
 - Space Complexity : O(V)
 - Time Complexity : O(V^2 + E)
@@ -90,7 +90,6 @@ is strictly better — it avoids repeated full scans.
 
 
 ## Approach 2: bfs_with_colored_sets
-### High Level Summary 
 - This uses 3 unordered_sets to track the status of each node : white, grey and black. 
 - Despite the use of 3 sets the time complexity is much better than Approach 1 even in the worst case scenario of when all nodes are disconnected 
 - Space Complexity : O(V)
