@@ -16,15 +16,12 @@ BUILD := build
 CLANG_FORMAT := clang-format
 CLANG_TIDY := clang-tidy
 
-# Automatically find all subdirectories (exclude build)
-SUBDIRS := $(shell find . -maxdepth 1 -type d ! -name . ! -name $(BUILD) | sed 's|./||')
-
-# Find all .cpp and .h files
-SOURCES := $(foreach d,$(SUBDIRS),$(wildcard $(d)/*.cpp))
-HEADERS := $(foreach d,$(SUBDIRS),$(wildcard $(d)/*.h))
+# Find all .cpp and .h files (recursive, remove leading ./)
+SOURCES := $(shell find . -type f -name '*.cpp' | sed 's|^\./||')
+HEADERS := $(shell find . -type f -name '*.h' | sed 's|^\./||')
 SRCFILES := $(SOURCES) $(HEADERS)
 
-# Convert src.cpp -> build/src_folder/src
+# Convert src.cpp -> build/src_folder/src (no .cpp in executable)
 TARGETS := $(patsubst %.cpp,$(BUILD)/%,$(SOURCES))
 
 # Dependency files
@@ -37,7 +34,8 @@ all: prebuild $(TARGETS)
 
 # ----------------------------------------
 # Pattern rule: build each executable
-# ----------------------------------------
+# $@ = build/.../name
+# $< = source file with .cpp
 $(BUILD)/%: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $< -o $@
