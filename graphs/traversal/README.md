@@ -169,13 +169,13 @@ White is an unordered set and hence is O(1) per loop. Worst case scenario of all
 
 
 ## Approach 3: Standard BFS
-Uses 1 bfs_queue, 1 traversal_order and only 1 visited_set
+Uses 1 bfs_queue, only 1 visited_set and 1 traversal_order
 - Space Complexity : O(V)
 - Time Complexity : O(V + E)
 Question: When do you add the node to Visited(unordered_set), and when to Order(traversal order vector) \
 ### The short rule (memorize this)
-👉 Mark a node as visited when you ENQUEUE it (push to Queue)
-👉 Add a node to the traversal when you DEQUEUE it (pop from Queue)
+- 👉 Push to Queue(Enqueue)  : mark node as visited/ put in visited set
+- 👉 Pop from Queue(Dequeue) : put node in traversal order
 
 That’s it. That rule holds for almost every BFS you’ll ever write.
 Thats the shortest explanation needed for the cleanest possible solution (see code for details)
