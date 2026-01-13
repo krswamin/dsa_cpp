@@ -1,5 +1,35 @@
 # dsa_cpp
-✅ Usage from the root directory \
+Scratch pad for DSA interview questions
+Leetcode 150: https://leetcode.com/studyplan/top-interview-150/
+Leetcode 75 : https://leetcode.com/studyplan/leetcode-75/
+
+## Prerquisites 
+✅ Install clang-format
+```
+sudo apt update
+sudo apt install clang-format
+```
+✅ Install clang-tidy
+```
+sudo apt update
+sudo apt install clang-tidy
+```
+
+✅  Install cppcheck
+```
+sudo apt update
+sudo apt install cppcheck
+```
+
+## Usage
+✅ Usage is from the root directory \
+
+✅ Clean all executables
+```
+make clean
+```
+delete the entire build/ folder
+
 ✅  Build all 
 ```
 make 
@@ -11,23 +41,21 @@ This will:
 - Makefile automatically enables parallel build using all available cores (-j option)
 - formats only modified files, then builds incrementally.
 
-Note: \ 
-#### Install clang-format
+✅  Running the programme 
+\
+All executables are inside the build folder. Choose any executable of choice from the build folder. \
+Example1. to run bfs on undirected graphs run
 ```
-sudo apt update
-sudo apt install clang-format
+./build/graphs/traversal/undirected_graph_bfs
 ```
-#### Install clang-tidy
+Example 2. To run the rotate image executable run
 ```
-sudo apt update
-sudo apt install clang-tidy
-```
-
-#### Install cppcheck
-```
-sudo apt install cppcheck
+./build/graphs/matrix/rotate_image
 ```
 
+
+
+### Additional Usage Details
 ✅  Use only some cores 
 
 If you'd like to override to use only some cores
