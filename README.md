@@ -3,6 +3,11 @@ Scratch pad for DSA interview questions
 Leetcode 150: https://leetcode.com/studyplan/top-interview-150/
 Leetcode 75 : https://leetcode.com/studyplan/leetcode-75/
 
+## Module specific READMEs
+- Module specific Readmes are in their respective folders such as graphs, trees etc.
+- Multiple READMEs within same code base /module is not common practise, but is very useful for quick documentation , and jotting down learnings. Also helps keep Readme's small and contained topic-wise.
+
+
 ## Prerquisites 
 ✅ Install clang-format
 ```
@@ -52,8 +57,6 @@ Example 2. To run the rotate image executable run
 ```
 ./build/graphs/matrix/rotate_image
 ```
-
-
 
 ### Additional Usage Details
 ✅  Use only some cores 
