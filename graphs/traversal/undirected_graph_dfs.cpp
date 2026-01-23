@@ -17,12 +17,18 @@ private:
   unordered_map<int, unordered_set<int>> graph;
 
 public:
-  UGraph(unordered_map<int, unordered_set<int>> graph);
+  UGraph(unordered_map<int, unordered_set<int>> const &graph);
   vector<int> dfs_standard_lambda(int start_node);
 };
 
 // Use initialization list in constructor
-UGraph::UGraph(unordered_map<int, unordered_set<int>> graph) : graph(graph) {}
+/*
+i) Uses const& : constant reference to prevent copying of the entire map input
+into the method variable graph_input
+
+*/
+UGraph::UGraph(unordered_map<int, unordered_set<int>> const &graph_input)
+    : graph(graph_input) {}
 
 // Standard implementation of dfs. It uses a lambda function
 vector<int> UGraph::dfs_standard_lambda(int start_node) {
@@ -31,16 +37,16 @@ vector<int> UGraph::dfs_standard_lambda(int start_node) {
   unordered_set<int> visited;
 
   // dfs_connected_nodes is the lambda function
-  auto dfs_connected_nodes = [&](int start_node) {
-    dfs_s.push(start_node);
-    order.push_back(start_node);
-    visited.emplace(start_node);
+  auto dfs_connected_nodes = [&](int root) {
+    dfs_s.push(root);
+    order.push_back(root);
+    visited.emplace(root);
 
-    while (dfs_s.size() != 0) {
+    while (!dfs_s.empty()) {
       auto current = dfs_s.top();
       bool all_children_traversed = true;
 
-      for (auto child : graph[current]) {
+      for (auto &child : graph[current]) {
         auto it = visited.find(child);
         // child has not been visited before
         if (it == visited.end()) {
@@ -58,8 +64,11 @@ vector<int> UGraph::dfs_standard_lambda(int start_node) {
     }
   };
 
-  dfs_connected_nodes(start_node);
-  for (auto node : graph) {
+  // If start_node is found , only then start dfs from that node
+  if (graph.find(start_node) != graph.end()) {
+    dfs_connected_nodes(start_node);
+  }
+  for (auto &node : graph) {
     auto it = visited.find(node.first);
     // Node has not been visited before
     if (it == visited.end()) {
@@ -83,5 +92,5 @@ int main() {
   for (auto x : order) {
     cout << x << ",";
   }
-  cout << "\n";
+  cout << '\n';
 }
